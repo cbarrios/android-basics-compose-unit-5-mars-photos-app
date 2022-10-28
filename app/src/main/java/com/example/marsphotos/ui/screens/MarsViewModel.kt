@@ -32,7 +32,7 @@ import retrofit2.HttpException
 import java.io.IOException
 
 sealed interface MarsUiState {
-    data class Success(val photo: MarsPhoto) : MarsUiState
+    data class Success(val photos: List<MarsPhoto>) : MarsUiState
     object Error : MarsUiState
     object Loading : MarsUiState
 }
@@ -59,7 +59,7 @@ class MarsViewModel(
         viewModelScope.launch {
             marsUiState = try {
                 val listResult = marsPhotosRepository.getMarsPhotos()
-                MarsUiState.Success(listResult[0])
+                MarsUiState.Success(listResult)
             } catch (e: IOException) {
                 MarsUiState.Error
             } catch (e: HttpException) {
